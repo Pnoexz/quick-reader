@@ -16,7 +16,7 @@ Although there are strong outward similarities between JavaScript and Java, incl
 //});
 
 function getFormattedText() {
-  return "JavaScript, often abbreviated as JS, is a high-level, dynamic, weakly typed, prototype-based, multi-paradigm, and interpreted programming language.";
+  //return "JavaScript, often abbreviated as JS, is a high-level, dynamic, weakly typed, prototype-based, multi-paradigm, and interpreted programming language.";
   return $('#text').val();
 }
 
@@ -48,11 +48,9 @@ class State {
 }
 
 function start(state) {
+  var state = new State(getFormattedText(), 0, 0)
   nextWord(state);
 }
-
-var state = new State(getFormattedText(), 0, 0)
-nextWord(state)
 
 function nextWord(state) {
   var textString = state.text;
@@ -61,20 +59,31 @@ function nextWord(state) {
   var nextSpacePosition = state.calculateIndexOfNextSpace()
 
 
-  var substr = textString.substr(wordIndex, nextSpacePosition - wordIndex);
+  var substr = textString.substr(wordIndex, nextSpacePosition - wordIndex).trim();
   displayText(substr);
-console.log(substr.trim())
   var offsetToNextWord = nextSpacePosition - wordIndex;
 
   state.increaseWordIndexBy(offsetToNextWord)
   if (!state.isCompleted && !state.running)
-    setTimeout(nextWord, 100 * calculateLengthMultiplier(substr.length), state);
+    setTimeout(nextWord, calculateTimeout(substr, state), state);
 }
 
 function calculateLengthMultiplier(length) {
   var multiplier = 1 + 1 / length**2;
   console.log(multiplier)
   return multiplier
+}
+
+function calculateTimeout(word, state) {
+  var base = 1000;
+  if (word.match(/\W+/ig)) {
+    base = base * 1.5;
+  }
+  if (word.match(/\d+/)) {
+    base = base * 1.3;
+  }
+  //console.log(word + ' (' +base+ ')')
+  return base;// * calculateLengthMultiplier(word.length)
 }
 
 function displayText(text) {
