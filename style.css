@@ -1,12 +1,27 @@
-#settings{display: none}
+/*#settings{display: none}*/
+#settings {
+
+}
+
+#settings #text {
+  height: 100px;
+}
+#settings #text, #settings #start{
+  width:100%
+}
+#speed label {
+  width:100%;
+  display:block;
+}
+#speed label input{
+  width:auto /* @TODO */
+}
 #readport{
-  /*width:100%;
-  height:100%;*/
-  font-size:4em;
+  width:100%;
+  height:100%;
+  font-size:6em;
   text-align:center;
   position: relative;
   /*top: 50%;
   transform: translateY(-50%);*/
-  padding-top: 50px;
-padding-bottom: 30px;
 }

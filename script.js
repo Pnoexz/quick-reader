@@ -89,35 +89,3 @@ function calculateTimeout(word, state) {
 function displayText(text) {
   $('#readport').text(text.trim())
 }
-
-/*
-
-
-function startInterval() {
-  setTimeout(
-    displayText,
-    100
-  )
-}
-
-function displayText() {
-  var textString = "JavaScript, often abbreviated as JS, is a high-level, dynamic, weakly typed, prototype-based, multi-paradigm, and interpreted programming language.";
-
-  var nextSpacePosition = textString.indexOf(' ', startIndex);
-
-  var substr = textString.substr(startIndex, nextSpacePosition - startIndex);
-
-
-  console.log(substr + ' [nextSpace:' + nextSpacePosition + ', startIndex: ' + startIndex + ']');
-  if (nextSpacePosition < 0) {
-    clearInterval(interval);
-  }
-  startIndex = nextSpacePosition + 1;
-
-
-}
-
-
-
-start();
-*/

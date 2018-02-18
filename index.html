@@ -6,35 +6,47 @@
     <link rel="stylesheet" href="style.css">
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
   </head>
-  <body>
-    <textarea id="text">As a7 1998 multi-paradigm8 language, JavaScript supports event-driven, functional, and imperative (including object-oriented and prototype-based) programming styles. It has an API for working with text, arrays, dates, regular expressions, and basic manipulation of the DOM, but the language itself does not include any I/O, such as networking, storage, or graphics facilities, relying for these upon the host environment in which it is embedded.
- Initially only implemented client-side in web browsers, JavaScript engines are now embedded in many other types of host software, including server-side in web servers and databases, and in non-web programs such as word processors and PDF software, and in runtime environments that make JavaScript available for writing mobile and desktop applications, including desktop widgets.
- Although there are strong outward similarities between JavaScript and Java, including language name, syntax, and respective standard libraries, the two languages are distinct and differ greatly in design; JavaScript was influenced by programming languages such as Self and Scheme.
-    </textarea>
-    <div id="settings">
-      <div id="speed">
+  <body class="fluid_container">
+    <div class="row">
+      <div id="settings" class="col-md-4">
+        <textarea id="text">As a7 1998 multi-paradigm8 language, JavaScript supports event-driven, functional, and imperative (including object-oriented and prototype-based) programming styles. It has an API for working with text, arrays, dates, regular expressions, and basic manipulation of the DOM, but the language itself does not include any I/O, such as networking, storage, or graphics facilities, relying for these upon the host environment in which it is embedded.
+   Initially only implemented client-side in web browsers, JavaScript engines are now embedded in many other types of host software, including server-side in web servers and databases, and in non-web programs such as word processors and PDF software, and in runtime environments that make JavaScript available for writing mobile and desktop applications, including desktop widgets.
+   Although there are strong outward similarities between JavaScript and Java, including language name, syntax, and respective standard libraries, the two languages are distinct and differ greatly in design; JavaScript was influenced by programming languages such as Self and Scheme.
+        </textarea>
+        <button id="start">Start</button>
+      </div>
+      <div class="col-md-4" id="speed">
         <label>
-          Word:
-          <input type="number" id="speedWord" value="300">
+          Base:
+          <input class="form-control-sm" type="number" id="speedBase" value="200">
         </label>
         <label>
           Puctuation:
-          <input type="number" id="speedPunctuation" value="500">
+          <select id="speedPunctuation" class="form-control-sm">
+            <option value="1">No change</option>
+            <option value="1.25">1/4</option>
+            <option value="1.5">Half</option>
+            <option value="1.75">3/4</option>
+            <option value="2">Double</option>
+          </select>
         </label>
         <label>
           Paragraph:
           <input type="number" id="speedParagraph" value="1000">
         </label>
       </div>
-      <div id="keybinds">
-      </div>
-      <div id="theme">
-      </div>
     </div>
-      <button id="start">Start</button>
-    <div id="help">
+    <div class="col-md-4" id="speed">
+      <div id="keybinds"></div>
+      <div id="theme"></div>
     </div>
-    <div id="readport">
+    <div class="row">
+      <div id="readport"></div>
+    </div>
+    <div class="row">
+      <div id="help">
+        * help
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="script.js"></script>
