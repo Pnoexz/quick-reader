@@ -16,51 +16,81 @@ Although there are strong outward similarities between JavaScript and Java, incl
 //});
 
 function getFormattedText() {
+  return "JavaScript, often abbreviated as JS, is a high-level, dynamic, weakly typed, prototype-based, multi-paradigm, and interpreted programming language.";
   return $('#text').val();
 }
 
-var paragraphIndex = 0;
-var startIndex = 0;
-var paragraphs;
+class State {
+  constructor(text, paragraphIndex, wordIndex) {
+    this.isCompleted = false;
+    this.text = text + ' '; // @TODO remove this quick hack to avoid skipping the last word because there isn't another space
+    this.textLength = text.length;
+    this.paragraphIndex = paragraphIndex;
+    this.wordIndex = wordIndex;
+  }
 
-function start() {
-  var text = getFormattedText();
-  paragraphs = text.split(/\n/gm);
-//  console.debug(paragraphs)
+  increaseWordIndexBy(offset) {
+    this.wordIndex = this.wordIndex + offset;
+  }
 
-  startInterval();
+  calculateIndexOfNextSpace() {
+    var index = this.text.indexOf(' ', this.wordIndex + 1);
+    if (index === -1) {
+      this.isCompleted = true;
+    }
+    return index;
+  }
 
-  /*for (var i = 0; i < paragraphs.length; i++) {
-    console.log('One p: ' + i)
-    $('#readport').text(paragraphs[i]);
-  }*/
+  debug() {
+    return "Word Index:" + this.wordIndex
+  }
 }
 
-var interval;
+function start() {
+  var state = new State(getFormattedText(), 0, 0)
+  nextWord(state);
+}
+
+function nextWord(state) {
+  var textString = state.text;
+  var wordIndex = state.wordIndex;
+
+  var nextSpacePosition = state.calculateIndexOfNextSpace()
+
+
+  var substr = textString.substr(wordIndex, nextSpacePosition - wordIndex);
+console.log(substr.trim())
+  var offsetToNextWord = nextSpacePosition - wordIndex;
+
+  state.increaseWordIndexBy(offsetToNextWord)
+  if (!state.isCompleted)
+    setTimeout(nextWord, 100, state);
+}
+
 
 function startInterval() {
-  interval = setInterval(
+  setTimeout(
     displayText,
-    500
+    100
   )
 }
 
-function displayText(interval) {
+function displayText() {
   var textString = "JavaScript, often abbreviated as JS, is a high-level, dynamic, weakly typed, prototype-based, multi-paradigm, and interpreted programming language.";
 
   var nextSpacePosition = textString.indexOf(' ', startIndex);
-  if (nextSpacePosition < 0)  return; // @TODO this removes the last word
-
-
 
   var substr = textString.substr(startIndex, nextSpacePosition - startIndex);
 
 
   console.log(substr + ' [nextSpace:' + nextSpacePosition + ', startIndex: ' + startIndex + ']');
+  if (nextSpacePosition < 0) {
+    clearInterval(interval);
+  }
   startIndex = nextSpacePosition + 1;
+
+
 }
-
-
 
 
 
