@@ -22,6 +22,7 @@ function getFormattedText() {
 
 class State {
   constructor(text, paragraphIndex, wordIndex) {
+    this.running = false;
     this.isCompleted = false;
     this.text = text + ' '; // @TODO remove this quick hack to avoid skipping the last word because there isn't another space
     this.textLength = text.length;
@@ -46,10 +47,12 @@ class State {
   }
 }
 
-function start() {
-  var state = new State(getFormattedText(), 0, 0)
+function start(state) {
   nextWord(state);
 }
+
+var state = new State(getFormattedText(), 0, 0)
+nextWord(state)
 
 function nextWord(state) {
   var textString = state.text;
@@ -59,13 +62,26 @@ function nextWord(state) {
 
 
   var substr = textString.substr(wordIndex, nextSpacePosition - wordIndex);
+  displayText(substr);
 console.log(substr.trim())
   var offsetToNextWord = nextSpacePosition - wordIndex;
 
   state.increaseWordIndexBy(offsetToNextWord)
-  if (!state.isCompleted)
-    setTimeout(nextWord, 100, state);
+  if (!state.isCompleted && !state.running)
+    setTimeout(nextWord, 100 * calculateLengthMultiplier(substr.length), state);
 }
+
+function calculateLengthMultiplier(length) {
+  var multiplier = 1 + 1 / length**2;
+  console.log(multiplier)
+  return multiplier
+}
+
+function displayText(text) {
+  $('#readport').text(text.trim())
+}
+
+/*
 
 
 function startInterval() {
@@ -95,3 +111,4 @@ function displayText() {
 
 
 start();
+*/
