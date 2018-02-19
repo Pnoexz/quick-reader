@@ -16,7 +16,6 @@ Although there are strong outward similarities between JavaScript and Java, incl
 //});
 
 function getFormattedText() {
-  //return "JavaScript, often abbreviated as JS, is a high-level, dynamic, weakly typed, prototype-based, multi-paradigm, and interpreted programming language.";
   return $('#text').val();
 }
 
@@ -28,6 +27,7 @@ class State {
     this.textLength = text.length;
     this.paragraphIndex = paragraphIndex;
     this.wordIndex = wordIndex;
+    this.baseSpeed = $('#speedBase').val()
   }
 
   increaseWordIndexBy(offset) {
@@ -75,7 +75,7 @@ function calculateLengthMultiplier(length) {
 }
 
 function calculateTimeout(word, state) {
-  var base = 1000;
+  var base = state.baseSpeed;
   if (word.match(/\W+/ig)) {
     base = base * 1.5;
   }
