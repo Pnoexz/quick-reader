@@ -11,7 +11,10 @@ Although there are strong outward similarities between JavaScript and Java, incl
 
 //$(document).on('ready', function() {
   $('#start').on('click', function() {
-    start();
+    startOrPause();
+  });
+  $('#stop').on('click', function() {
+    stop();
   });
 //});
 
@@ -21,13 +24,15 @@ function getFormattedText() {
 
 class State {
   constructor(text, paragraphIndex, wordIndex) {
-    this.running = false;
+    this.running = true;
     this.isCompleted = false;
     this.text = text + ' '; // @TODO remove this quick hack to avoid skipping the last word because there isn't another space
     this.textLength = text.length;
     this.paragraphIndex = paragraphIndex;
     this.wordIndex = wordIndex;
-    this.baseSpeed = $('#speedBase').val()
+    this.baseSpeed = $('#speedBase').val();
+    this.punctuationSpeed = $('#speedPunctuation').val();
+    this.specialSpeed = $('#speedSpecial').val();
   }
 
   increaseWordIndexBy(offset) {
@@ -42,13 +47,88 @@ class State {
     return index;
   }
 
+  pause() {
+    this.running = false;
+  }
+
+  resume() {
+    this.running = true;
+    this.isCompleted = false;
+  }
+
+  restart() {
+    this.running = true;
+    this.isCompleted = false;
+  }
+
+  stop() {
+    this.running = false;
+    this.paragraphIndex = 0;
+    this.wordIndex = 0;
+  }
+
+  shouldContinue() {
+    return this.running && !this.isCompleted;
+  }
+
   debug() {
     return "Word Index:" + this.wordIndex
   }
 }
 
-function start(state) {
-  var state = new State(getFormattedText(), 0, 0)
+/*
+class Factory {
+  constructor() {
+    this.instance = null;
+  }
+
+  create(text) {
+    var state = new State(text, 0, 0)
+    this.instance = state;
+    return state;
+  }
+
+  destroyInstance() {
+    this.instance = null;
+  }
+
+  getInstance() {
+    return this.instance;
+  }
+}
+
+var factory = new Factory();
+*/
+
+var state;
+
+function startOrPause() {
+  if (typeof state === 'undefined') {
+    console.log('Page is new and no state has been run before.');
+    start();
+  } else if (state.isCompleted === true) {
+    console.log('State is completed. We need to resume.')
+    state.resume()
+    nextWord(state)
+  } else if (state.running === false) {
+    console.log('State is present but not running. We need to restart.')
+    state.resume();
+    nextWord(state)
+  } else {
+    console.log('State is unfinished and was runnning. We need to pause.')
+    state.pause();
+  }
+}
+
+function stop() {
+  if (typeof state !== 'undefined') {
+    state.stop();
+  }
+  clearReadport();  // @TODO do this in a timeout because when we stop, there's a timeout already running
+}
+
+function start() {
+  state = new State(getFormattedText(), 0, 0);
   nextWord(state);
 }
 
@@ -64,8 +144,9 @@ function nextWord(state) {
   var offsetToNextWord = nextSpacePosition - wordIndex;
 
   state.increaseWordIndexBy(offsetToNextWord)
-  if (!state.isCompleted && !state.running)
+  if (state.shouldContinue()) {
     setTimeout(nextWord, calculateTimeout(substr, state), state);
+  }
 }
 
 function calculateLengthMultiplier(length) {
@@ -76,16 +157,18 @@ function calculateLengthMultiplier(length) {
 
 function calculateTimeout(word, state) {
   var base = state.baseSpeed;
-  if (word.match(/\W+/ig)) {
-    base = base * 1.5;
+  if (word.match(/\W+/ig) || word.match(/\d+/)) {
+    // @TODO revisit special cases and impact these changes in the UI
+    base = base * state.specialSpeed
   }
-  if (word.match(/\d+/)) {
-    base = base * 1.3;
-  }
-  //console.log(word + ' (' +base+ ')')
+
   return base;// * calculateLengthMultiplier(word.length)
 }
 
 function displayText(text) {
-  $('#readport').text(text.trim())
+  $('#readport').text(text.trim());
+}
+
+function clearReadport() {
+  $('#readport').text('');
 }
