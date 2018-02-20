@@ -158,7 +158,6 @@ function calculateLengthMultiplier(length) {
 function calculateTimeout(word, state) {
   var base = state.baseSpeed;
   if (word.match(/\W+/ig) || word.match(/\d+/)) {
-    // @TODO revisit special cases and impact these changes in the UI
     base = base * state.specialSpeed
   }
 
