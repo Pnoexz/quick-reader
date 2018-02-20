@@ -13,9 +13,19 @@ Although there are strong outward similarities between JavaScript and Java, incl
   $('#start').on('click', function() {
     startOrPause();
   });
+  $(document).on('keyup', function(e) {
+    if (e.key === ' ' && e.target.tagName != 'TEXTAREA') {
+      startOrPause();
+    } else if (e.key === 'Escape') {
+      stop()
+    }
+  });
   $('#stop').on('click', function() {
     stop();
   });
+  $('#text').on('input propertychange', function() {
+    stopAndClear();
+  })
 //});
 
 function getFormattedText() {
@@ -103,8 +113,8 @@ var factory = new Factory();
 var state;
 
 function startOrPause() {
-  if (typeof state === 'undefined') {
-    console.log('Page is new and no state has been run before.');
+  if (typeof state === 'undefined' || state == null) {
+    console.log('Page is new and no state has been run before or text changed.');
     start();
   } else if (state.isCompleted === true) {
     console.log('State is completed. We need to resume.')
@@ -121,10 +131,15 @@ function startOrPause() {
 }
 
 function stop() {
-  if (typeof state !== 'undefined') {
+  if (typeof state !== 'undefined' && state != null) {
     state.stop();
   }
   clearReadport();  // @TODO do this in a timeout because when we stop, there's a timeout already running
+}
+
+function stopAndClear() {
+  stop();
+  state = null;
 }
 
 function start() {

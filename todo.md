@@ -5,13 +5,15 @@ Logic
 -----
   * [ ] Unify the different speed modifiers
   * [ ] Revisit the speed modifier base on word length
-  * [ ] Revisit
   * [ ] Update state when speed is changed
+  * [ ] Fix the on document ready event
+  * [ ] Fix bug where changing the text skips the first word
+          Somehow nextWord gets called and it moves the state.wordIndex
 
 Controls
 --------
   * [ ] Put clearReadport on a timeout because a timeout is already running when the stop control is pressed
-  * [ ] Add keybindings
+  * [x] Add keybindings
     * Pause/Resume (spacebar)
     * Stop (escape?)
 
